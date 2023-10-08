@@ -26,7 +26,7 @@ app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.get('/test-get',(req,res)=>{
+app.get('/test-get', (req, res) => {
     res.send("Hello World!")
 })
 
@@ -39,14 +39,14 @@ app.post('/comment', async (req) => {
     await postComment(req.body)
 })
 
-app.post('/line-msg', (req) => {
+app.post('/line-msg', async (req) => {
     const data = req.body
     const msg = `
     ส่งจาก Contact ของ portfolio-next
     เวลา:${new Date()}
     หัวข้อ:${data.title}
     ข้อความ:${data.text}`
-    lineNotify.notify({ message: msg })
+    await lineNotify.notify({ message: msg })
 })
 
 // เริ่มต้น server ที่พอร์ต ...

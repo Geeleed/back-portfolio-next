@@ -26,6 +26,10 @@ app.use(cors())
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+app.get('/test-get',(req,res)=>{
+    res.send("Hello World!")
+})
+
 app.get('/comment', async (req, res) => {
     const data = await getComment()
     res.send(data)

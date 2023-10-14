@@ -85,7 +85,7 @@ let records = []
 app.post('/post-the-data', (req,res)=>{
     data=req.body;
     records.push(data)
-    res.send(records)
+    res.redirect('back')
 })
 app.get('/get-the-data', (req,res)=>{
     res.send(records)

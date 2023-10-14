@@ -81,14 +81,22 @@ app.get('/getApi', async (req, res) => {
 })
 
 
-let records = []
+// let records = []
+// app.post('/post-the-data', (req,res)=>{
+//     data=req.body;
+//     records.push(data)
+//     res.redirect('back')
+// })
+// app.get('/get-the-data', (req,res)=>{
+    //     res.send(records)
+    // })
+    
+const fs = require('fs')
 app.post('/post-the-data', (req,res)=>{
-    data=req.body;
-    records.push(data)
+    fs.appendFile('RECORDER.txt', req.body, (err) => {
+        if (err) throw err
+    })
     res.redirect('back')
-})
-app.get('/get-the-data', (req,res)=>{
-    res.send(records)
 })
 
 

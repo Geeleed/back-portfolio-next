@@ -65,11 +65,13 @@ app.post('/line-msg', async (req) => {
     await lineNotify.notify({ message: msg })
 })
 
-app.post('/uploadApi', async (req,res) => {
-    if (req.body.admin_password == '7f8cc3dc30ec7d915aef41c1300b65d20b8ec7d393bb128d70117ccece90db0fab44a97e1bbb834314800a2ce8d302f6e6445ae4ed5a332cee7f7ec38c8b4373') {
+app.post('/uploadApi', async (req, res) => {
+    const auth = fetch('https://math-hub-gamma.vercel.app/sha512/' + req.body.admin_password).then(res => res.json())
+    .then(data => { req.body.admin_password = ''; return data.hash_hex })
+    if (auth == '7f8cc3dc30ec7d915aef41c1300b65d20b8ec7d393bb128d70117ccece90db0fab44a97e1bbb834314800a2ce8d302f6e6445ae4ed5a332cee7f7ec38c8b4373') {
         await uploadAPI(req.body)
         res.send('upload api สำเร็จ')
-    }else{
+    } else {
         res.send('รหัสผ่านไม่ถูกต้อง')
     }
 })

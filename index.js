@@ -84,44 +84,20 @@ app.get('/getApi', async (req, res) => {
 })
 
 
-// let records = []
-// app.post('/post-the-data', (req,res)=>{
-//     data=req.body;
-//     records.push(data)
-//     res.redirect('back')
-// })
-// app.get('/get-the-data', (req,res)=>{
-//     res.send(records)
-// })
-
-const fs = require('fs')
+let records = []
 app.post('/post-the-data', (req, res) => {
-    console.log(req.body)
-    fs.appendFile('RECORDER.txt', JSON.stringify(req.body)+',', (err) => {
-        if (err) {
-            console.error('เกิดข้อผิดพลาดในการเพิ่มข้อมูล:', err);
-            return;
-        }
-        // console.log('เพิ่มข้อมูลสำเร็จ');
-    });
+    data = req.body;
+    records.push(data)
     res.redirect('back')
 })
 app.get('/get-the-data', (req, res) => {
-    fs.readFile('RECORDER.txt', 'utf8', (err, data) => {
-        if (err) {
-            console.error('เกิดข้อผิดพลาดในการอ่านไฟล์:', err);
-            return;
-        }
-
-        // ตรวจสอบข้อมูลที่อ่านได้ในตัวแปร data
-        // ดำเนินการตามที่คุณต้องการ
-        res.setHeader('Content-Type', 'text/plain');
-        res.send(data);
-    });
-
-});
-
-
+    res.send(records)
+})
+app.get('/clear-the-data', (req, res) => {
+    records = [];
+    // res.end()
+    res.redirect('back')
+})
 
 // เริ่มต้น server ที่พอร์ต ...
 app.listen(PORT, () => {

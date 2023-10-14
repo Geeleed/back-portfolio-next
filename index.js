@@ -41,6 +41,9 @@ app.use(cors())
 // กำหนดให้ Express ใช้ body-parser เพื่อแปลงข้อมูลที่ส่งมาจากฟอร์มเป็น JSON
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
 
 app.get('/test-get', (req, res) => {
     res.send("Hello World!")
@@ -88,16 +91,36 @@ app.get('/getApi', async (req, res) => {
 //     res.redirect('back')
 // })
 // app.get('/get-the-data', (req,res)=>{
-    //     res.send(records)
-    // })
-    
+//     res.send(records)
+// })
+
 const fs = require('fs')
-app.post('/post-the-data', (req,res)=>{
-    fs.appendFile('RECORDER.txt', req.body, (err) => {
-        if (err) throw err
-    })
+app.post('/post-the-data', (req, res) => {
+    console.log(req.body)
+    fs.appendFile('RECORDER.txt', JSON.stringify(req.body)+',', (err) => {
+        if (err) {
+            console.error('เกิดข้อผิดพลาดในการเพิ่มข้อมูล:', err);
+            return;
+        }
+        // console.log('เพิ่มข้อมูลสำเร็จ');
+    });
     res.redirect('back')
 })
+app.get('/get-the-data', (req, res) => {
+    fs.readFile('RECORDER.txt', 'utf8', (err, data) => {
+        if (err) {
+            console.error('เกิดข้อผิดพลาดในการอ่านไฟล์:', err);
+            return;
+        }
+
+        // ตรวจสอบข้อมูลที่อ่านได้ในตัวแปร data
+        // ดำเนินการตามที่คุณต้องการ
+        res.setHeader('Content-Type', 'text/plain');
+        res.send(data);
+    });
+
+});
+
 
 
 // เริ่มต้น server ที่พอร์ต ...

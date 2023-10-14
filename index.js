@@ -66,19 +66,31 @@ app.post('/line-msg', async (req) => {
 })
 
 app.post('/uploadApi', async (req, res) => {
-    const auth = fetch('https://math-hub-gamma.vercel.app/sha512/' + req.body.admin_password).then(res => res.json())
-    .then(data => { req.body.admin_password = ''; return data.hash_hex })
-    if (auth == '7f8cc3dc30ec7d915aef41c1300b65d20b8ec7d393bb128d70117ccece90db0fab44a97e1bbb834314800a2ce8d302f6e6445ae4ed5a332cee7f7ec38c8b4373') {
-        await uploadAPI(req.body)
-        res.send('upload api สำเร็จ')
-    } else {
-        res.send('รหัสผ่านไม่ถูกต้อง')
-    }
+    fetch('https://math-hub-gamma.vercel.app/sha512/' + req.body.admin_password).then(res => res.json())
+        .then(data => {
+            delete req.body['admin_password']
+            if (data.hash_hex == 'd698497891ef4dfe9ef3d812a6e95492a97dceef39023c2c420d2430ab43aafe4855827f746fde0ac87260e94870a40ce4059eead1389ed97344e57f9c401414') {
+                uploadAPI(req.body)
+            }
+            res.redirect('back')
+        })
 })
 app.get('/getApi', async (req, res) => {
     const data = await getApi()
     res.send(data)
 })
+
+
+let records = []
+app.post('/post-the-data', (req,res)=>{
+    data=req.body;
+    records.push(data)
+    res.send(records)
+})
+app.get('/get-the-data', (req,res)=>{
+    res.send(records)
+})
+
 
 // เริ่มต้น server ที่พอร์ต ...
 app.listen(PORT, () => {
